@@ -32,6 +32,33 @@
             z-index: -1;
         }
 
+        /* DİL SEÇENEĞİ */
+        .lang-switcher {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 10000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: #00122e;
+        }
+
         header {
             height: 100vh;
             display: flex;
@@ -53,19 +80,12 @@
             box-shadow: 0 0 25px rgba(251, 219, 16, 0.2);
         }
 
-        /* İSİM PARLAMA EFEKTİ (SHIMMER) */
         h1 {
             font-size: 3.5rem;
             margin: 0;
             font-weight: 800;
             display: inline-block;
-            background: linear-gradient(
-                to right, 
-                #fff 20%, 
-                var(--accent) 40%, 
-                var(--accent) 60%, 
-                #fff 80%
-            );
+            background: linear-gradient(to right, #fff 20%, var(--accent) 40%, var(--accent) 60%, #fff 80%);
             background-size: 200% auto;
             color: #fff;
             background-clip: text;
@@ -75,119 +95,217 @@
             animation: shine 3s linear infinite;
         }
 
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
+        @keyframes shine { to { background-position: 200% center; } }
 
-        /* AŞAĞI KAYDIR ANİMASYONU */
+        /* HAREKETLİ AŞAĞI KAYDIR ANİMASYONU */
         .scroll-indicator {
             position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: var(--accent);
             text-decoration: none;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
-            40% {transform: translateY(-10px) translateX(-50%);}
+            color: var(--accent);
         }
 
         .mouse {
-            width: 25px; height: 40px;
+            width: 26px;
+            height: 42px;
             border: 2px solid var(--accent);
-            border-radius: 20px;
-            display: flex; justify-content: center; padding-top: 5px;
+            border-radius: 15px;
+            position: relative;
         }
-        .wheel { width: 4px; height: 8px; background: var(--accent); border-radius: 2px; }
+
+        .wheel {
+            width: 4px;
+            height: 8px;
+            background: var(--accent);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 8px;
+            border-radius: 2px;
+            animation: scrollWheel 1.5s infinite;
+        }
+
+        .arrow {
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid var(--accent);
+            border-bottom: 2px solid var(--accent);
+            transform: rotate(45deg);
+            margin-top: 8px;
+            animation: arrowBounce 1.5s infinite;
+        }
+
+        @keyframes scrollWheel { 0% { opacity: 1; top: 8px; } 100% { opacity: 0; top: 20px; } }
+        @keyframes arrowBounce { 0%, 100% { transform: rotate(45deg) translate(0, 0); } 50% { transform: rotate(45deg) translate(5px, 5px); } }
 
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-
         h2 { font-size: 2rem; border-bottom: 2px solid var(--accent); display: inline-block; margin-bottom: 30px; }
-
-        .about-text { background: var(--card); padding: 30px; border-radius: 20px; border-left: 5px solid var(--accent); }
-
+        .about-text { background: var(--card); padding: 35px; border-radius: 20px; border-left: 5px solid var(--accent); }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 20px; }
-
         .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid rgba(251, 219, 16, 0.05); }
         .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card h3 { color: var(--accent); }
-
-        .skill-badge {
-            background: rgba(251, 219, 16, 0.1);
-            color: var(--accent);
-            padding: 8px 16px; border-radius: 50px; font-weight: 600;
-            border: 1px solid var(--accent); margin: 5px; display: inline-block;
-        }
-
+        .skill-badge { background: rgba(251, 219, 16, 0.1); color: var(--accent); padding: 8px 16px; border-radius: 50px; font-weight: 600; border: 1px solid var(--accent); margin: 5px; display: inline-block; }
         footer { text-align: center; padding: 60px 20px; color: var(--secondary); font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
+<div class="lang-switcher">
+    <button id="btn-tr" class="lang-btn active" onclick="setLanguage('tr')">TR</button>
+    <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
+</div>
+
 <header>
     <img src="profil.jpg" alt="Samet Altunkanat" class="profile-img">
     <h1>Samet Altunkanat</h1>
-    <p style="color: var(--secondary); font-size: 1.2rem; margin-top: 10px;">Selçuk Üniversitesi | Bilgisayar Mühendisliği 3. Sınıf</p>
+    <p id="hero-subtitle" style="color: var(--secondary); font-size: 1.2rem; margin-top: 10px;">Selçuk Üniversitesi | Bilgisayar Mühendisliği</p>
     
-    <div style="margin-top: 15px;">
+    <div id="hero-badges" style="margin-top: 15px;">
         <span class="skill-badge">NLP</span>
         <span class="skill-badge">Flutter</span>
         <span class="skill-badge">Python</span>
+        <span class="skill-badge">Django</span>
     </div>
 
     <a href="#hakkimda" class="scroll-indicator">
         <div class="mouse"><div class="wheel"></div></div>
-        <span style="font-size: 0.8rem; margin-top: 5px;">Aşağı Kaydır</span>
+        <div class="arrow"></div>
+        <span id="scroll-text" style="font-size: 0.7rem; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Aşağı Kaydır</span>
     </a>
 </header>
 
 <div class="container" id="hakkimda">
     <section>
-        <h2>Hakkımda</h2>
-        <div class="about-text">
-            Selçuk Üniversitesi'nde Bilgisayar Mühendisliği 3. sınıf öğrencisiyim. 
-            <b>Doğal Dil İşleme (NLP)</b> ve <b>Mobil Uygulama Geliştirme</b> konularında kendimi geliştiriyorum. 
-            Teknolojiye duyduğum merakı somut projelere dönüştürmek en büyük motivasyonum.
-        </div>
+        <h2 id="title-about">Hakkımda</h2>
+        <div id="content-about" class="about-text">
+            </div>
     </section>
 
     <section style="margin-top: 60px;">
-        <h2>Neler Yapıyorum?</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>Afet Yardım Platformu</h3>
-                <p>TÜBİTAK 2209 kapsamında toplumsal dayanışma için geliştirdiğim dijital çözüm.</p>
+        <h2 id="title-projects">Projelerim</h2>
+        <div id="grid-projects" class="grid">
             </div>
-            <div class="card">
-                <h3>Churn Analizi</h3>
-                <p>Veri madenciliği ve ML yaklaşımlarıyla kullanıcı kaybı tahmini.</p>
-            </div>
-            <div class="card">
-                <h3>Endüstriyel Tahminleme</h3>
-                <p>Makine arızalarını önceden tespit ederek verimliliği artıran algoritmalar.</p>
-            </div>
-        </div>
     </section>
 
     <section id="iletisim" style="margin-top: 60px;">
-        <h2>İletişim</h2>
+        <h2 id="title-contact">İletişim</h2>
         <div class="card" style="text-align: center; border: 2px dashed var(--accent);">
-            <p>Fikir alışverişi veya iş birliği için:</p>
+            <p id="contact-text">İş birliği için:</p>
             <p style="font-size: 1.3rem;"><strong>altunkanatsamet@gmail.com</strong></p>
             <p style="opacity: 0.6;">Konya | Adana</p>
         </div>
     </section>
 </div>
 
-<footer>
-    <p>© 2026 Samet Altunkanat | built with passion 💙💛</p>
-</footer>
+<footer><p>© 2026 Samet Altunkanat | built with passion 💙💛</p></footer>
 
+<div id="ai-chat-container" style="position: fixed; bottom: 25px; right: 25px; z-index: 9999;">
+    <button onclick="toggleBot()" style="background: var(--accent); border: none; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.4); font-size: 30px;">🤖</button>
+    <div id="bot-window" style="display: none; width: 330px; height: 480px; background: var(--bg); border: 2px solid var(--accent); border-radius: 20px; position: absolute; bottom: 75px; right: 0; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <div style="background: var(--accent); color: #000; padding: 15px; font-weight: bold; display: flex; justify-content: space-between;">
+            <span id="bot-name">SametBot AI</span>
+            <button onclick="toggleBot()" style="background:none; border:none; cursor:pointer; font-weight: bold;">×</button>
+        </div>
+        <div id="chat-logs" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;"></div>
+        <div style="padding: 10px; display: flex; gap: 5px; border-top: 1px solid #1e293b;">
+            <input type="text" id="bot-input" style="flex: 1; background: #00122e; border: 1px solid var(--accent); color: #fff; padding: 10px; border-radius: 8px; outline: none;">
+            <button onclick="askBot()" id="btn-send" style="background: var(--accent); border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;">Gönder</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let lang = 'tr';
+
+    const data = {
+        tr: {
+            subtitle: "Selçuk Üniversitesi | Bilgisayar Mühendisliği 3. Sınıf",
+            scroll: "Aşağı Kaydır",
+            aboutTitle: "Hakkımda",
+            projectsTitle: "Projelerim",
+            contactTitle: "İletişim",
+            contactText: "İş birliği için:",
+            botWelcome: "Merhaba. Ben Samet Altunkanat'ın dijital asistanıyım. Nasıl yardımcı olabilirim?",
+            botBtn: "Gönder",
+            about: `<p>Merhaba, ben <strong>Samet Altunkanat</strong>. Selçuk Üniversitesi Bilgisayar Mühendisliği bölümünde lisans eğitimime devam etmekteyim. Yazılım geliştirme sürecini; sadece kod yazmak olarak değil, karmaşık problemlere teknolojik ve sürdürülebilir çözümler üretme sanatı olarak görüyorum.</p>
+                    <p><strong>• Proje Yönetimi:</strong> TÜBİTAK 2209-A programı kapsamında "Topluluk Temelli Afet Yardım Platformu" yürütücüsüyüm.</p>
+                    <p><strong>• Ekosistem:</strong> Backend'de Django & MSSQL, Mobil'de Flutter & Firebase üzerine yoğunlaşıyorum.</p>`,
+            projects: `<div class="card"><h3>Afet Yardım Platformu</h3><p>TÜBİTAK 2209 kapsamında geliştirilen kriz yönetim sistemi.</p></div>
+                       <div class="card"><h3>SÜ-APS Portalı</h3><p>Django tabanlı akademik performans ve hedef yönetim sistemi.</p></div>`,
+            botResponses: [
+                { keys: ["selam", "merhaba"], reply: "Merhaba, size nasıl yardımcı olabilirim?" },
+                { keys: ["proje", "neler yaptın"], reply: "Samet'in TÜBİTAK 2209 Afet Yardım ve SÜ-APS projeleri bulunmaktadır." },
+                { keys: ["okul", "eğitim"], reply: "Selçuk Üniversitesi'nde Bilgisayar Mühendisliği okuyor." }
+            ],
+            botUnknown: "Bu konuda detaylı bilgim yok, ancak altunkanatsamet@gmail.com üzerinden sorabilirsiniz."
+        },
+        en: {
+            subtitle: "Selçuk University | Computer Engineering 3rd Year",
+            scroll: "Scroll Down",
+            aboutTitle: "About Me",
+            projectsTitle: "My Projects",
+            contactTitle: "Contact",
+            contactText: "For collaboration:",
+            botWelcome: "Hello. I am Samet Altunkanat's digital assistant. How can I help you?",
+            botBtn: "Send",
+            about: `<p>Hi, I'm <strong>Samet Altunkanat</strong>. A Computer Engineering student at Selçuk University. I view software development not just as coding, but as the art of creating technological and sustainable solutions.</p>
+                    <p><strong>• Management:</strong> Lead of "Community-Based Disaster Relief Platform" under TÜBİTAK 2209-A.</p>
+                    <p><strong>• Ecosystem:</strong> Specialized in Django & MSSQL for Backend, Flutter & Firebase for Mobile.</p>`,
+            projects: `<div class="card"><h3>Disaster Relief Platform</h3><p>Crisis management system developed under TÜBİTAK 2209.</p></div>
+                       <div class="card"><h3>SÜ-APS Portal</h3><p>Django-based academic performance and goal management system.</p></div>`,
+            botResponses: [
+                { keys: ["hi", "hello", "hey"], reply: "Hello! How can I assist you today?" },
+                { keys: ["project", "work"], reply: "Samet has key projects like TÜBİTAK 2209 Disaster Relief and SÜ-APS Portal." },
+                { keys: ["school", "education"], reply: "He is studying Computer Engineering at Selçuk University." }
+            ],
+            botUnknown: "I don't have detailed info on this, but you can ask via altunkanatsamet@gmail.com."
+        }
+    };
+
+    function setLanguage(l) {
+        lang = l;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + l).classList.add('active');
+
+        document.getElementById('hero-subtitle').innerText = data[lang].subtitle;
+        document.getElementById('scroll-text').innerText = data[lang].scroll;
+        document.getElementById('title-about').innerText = data[lang].aboutTitle;
+        document.getElementById('content-about').innerHTML = data[lang].about;
+        document.getElementById('title-projects').innerText = data[lang].projectsTitle;
+        document.getElementById('grid-projects').innerHTML = data[lang].projects;
+        document.getElementById('title-contact').innerText = data[lang].contactTitle;
+        document.getElementById('contact-text').innerText = data[lang].contactText;
+        document.getElementById('btn-send').innerText = data[lang].botBtn;
+        
+        document.getElementById('chat-logs').innerHTML = `<div style="background: #0a244d; color: #fff; padding: 10px; border-radius: 10px;">${data[lang].botWelcome}</div>`;
+    }
+
+    function toggleBot() { const b = document.getElementById('bot-window'); b.style.display = b.style.display === 'none' ? 'flex' : 'none'; }
+
+    function askBot() {
+        const input = document.getElementById('bot-input');
+        const logs = document.getElementById('chat-logs');
+        const val = input.value.toLowerCase().trim();
+        if(!val) return;
+
+        logs.innerHTML += `<div style="align-self: flex-end; background: var(--accent); color: #000; padding: 10px; border-radius: 10px; max-width: 80%; font-weight: 600;">${input.value}</div>`;
+        
+        let reply = data[lang].botUnknown;
+        for(let r of data[lang].botResponses) {
+            if(r.keys.some(k => val.includes(k))) { reply = r.reply; break; }
+        }
+
+        setTimeout(() => {
+            logs.innerHTML += `<div style="align-self: flex-start; background: #0a244d; color: #fff; padding: 10px; border-radius: 10px; max-width: 80%;">${reply}</div>`;
+            logs.scrollTop = logs.scrollHeight;
+        }, 400);
+        input.value = "";
+    }
+
+    window.onload = () => setLanguage('tr');
+</script>
 </body>
 </html>
