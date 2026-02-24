@@ -6,138 +6,26 @@
     <title>Samet Altunkanat | Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #00122e; /* FB Lacivert */
-            --card: #051c42; 
-            --accent: #fbdb10; /* FB Sarı */
-            --text: #f8fafc;
-            --secondary: #94a3b8;
-        }
-
+        :root { --bg: #00122e; --card: #051c42; --accent: #fbdb10; --text: #f8fafc; --secondary: #94a3b8; }
         * { box-sizing: border-box; transition: all 0.3s ease; scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            line-height: 1.6;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 30%, #0a244d 0%, #00122e 100%);
-            z-index: -1;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 30%, #0a244d 0%, #00122e 100%); z-index: -1; }
 
         /* DİL SEÇENEĞİ */
-        .lang-switcher {
-            position: fixed;
-            top: 25px;
-            left: 25px;
-            z-index: 10000;
-            display: flex;
-            gap: 10px;
-        }
+        .lang-switcher { position: fixed; top: 25px; left: 25px; z-index: 10000; display: flex; gap: 10px; }
+        .lang-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--accent); color: white; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.8rem; backdrop-filter: blur(5px); }
+        .lang-btn.active { background: var(--accent); color: #00122e; }
 
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--accent);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 800;
-            font-size: 0.8rem;
-            backdrop-filter: blur(5px);
-        }
-
-        .lang-btn.active {
-            background: var(--accent);
-            color: #00122e;
-        }
-
-        header {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-        }
-
-        .profile-img {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            border: 4px solid var(--accent);
-            margin-bottom: 20px;
-            object-fit: cover;
-            box-shadow: 0 0 25px rgba(251, 219, 16, 0.2);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin: 0;
-            font-weight: 800;
-            display: inline-block;
-            background: linear-gradient(to right, #fff 20%, var(--accent) 40%, var(--accent) 60%, #fff 80%);
-            background-size: 200% auto;
-            color: #fff;
-            background-clip: text;
-            text-fill-color: transparent;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
-        }
-
+        header { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; }
+        .profile-img { width: 160px; height: 160px; border-radius: 50%; border: 4px solid var(--accent); margin-bottom: 20px; object-fit: cover; box-shadow: 0 0 25px rgba(251, 219, 16, 0.2); }
+        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; display: inline-block; background: linear-gradient(to right, #fff 20%, var(--accent) 40%, var(--accent) 60%, #fff 80%); background-size: 200% auto; color: #fff; background-clip: text; text-fill-color: transparent; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* HAREKETLİ AŞAĞI KAYDIR ANİMASYONU */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--accent);
-        }
-
-        .mouse {
-            width: 26px;
-            height: 42px;
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            position: relative;
-        }
-
-        .wheel {
-            width: 4px;
-            height: 8px;
-            background: var(--accent);
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 8px;
-            border-radius: 2px;
-            animation: scrollWheel 1.5s infinite;
-        }
-
-        .arrow {
-            width: 10px;
-            height: 10px;
-            border-right: 2px solid var(--accent);
-            border-bottom: 2px solid var(--accent);
-            transform: rotate(45deg);
-            margin-top: 8px;
-            animation: arrowBounce 1.5s infinite;
-        }
-
+        /* AŞAĞI KAYDIR */
+        .scroll-indicator { position: absolute; bottom: 40px; display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--accent); }
+        .mouse { width: 26px; height: 42px; border: 2px solid var(--accent); border-radius: 15px; position: relative; }
+        .wheel { width: 4px; height: 8px; background: var(--accent); position: absolute; left: 50%; transform: translateX(-50%); top: 8px; border-radius: 2px; animation: scrollWheel 1.5s infinite; }
+        .arrow { width: 10px; height: 10px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); margin-top: 8px; animation: arrowBounce 1.5s infinite; }
         @keyframes scrollWheel { 0% { opacity: 1; top: 8px; } 100% { opacity: 0; top: 20px; } }
         @keyframes arrowBounce { 0%, 100% { transform: rotate(45deg) translate(0, 0); } 50% { transform: rotate(45deg) translate(5px, 5px); } }
 
@@ -149,6 +37,15 @@
         .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .skill-badge { background: rgba(251, 219, 16, 0.1); color: var(--accent); padding: 8px 16px; border-radius: 50px; font-weight: 600; border: 1px solid var(--accent); margin: 5px; display: inline-block; }
         footer { text-align: center; padding: 60px 20px; color: var(--secondary); font-size: 0.9rem; }
+
+        /* MOBİL İÇİN DÜZELTMELER (YENİ EKLENDİ) */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; } /* Mobilde başlığı biraz küçült */
+            header { padding-top: 80px; justify-content: flex-start; } /* Üstten boşluk bırak ve içeriği yukarı al */
+            .profile-img { width: 130px; height: 130px; } /* Profil fotosunu küçült */
+            #hero-badges { margin-bottom: 60px; } /* Rozetlerin altına boşluk ekle ki "Aşağı Kaydır" ile çakışmasın */
+            .lang-switcher { top: 15px; left: 15px; } /* Dil butonlarını biraz daha yukarı al */
+        }
     </style>
 </head>
 <body>
@@ -180,14 +77,12 @@
 <div class="container" id="hakkimda">
     <section>
         <h2 id="title-about">Hakkımda</h2>
-        <div id="content-about" class="about-text">
-            </div>
+        <div id="content-about" class="about-text"></div>
     </section>
 
     <section style="margin-top: 60px;">
         <h2 id="title-projects">Projelerim</h2>
-        <div id="grid-projects" class="grid">
-            </div>
+        <div id="grid-projects" class="grid"></div>
     </section>
 
     <section id="iletisim" style="margin-top: 60px;">
@@ -269,7 +164,6 @@
         lang = l;
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('btn-' + l).classList.add('active');
-
         document.getElementById('hero-subtitle').innerText = data[lang].subtitle;
         document.getElementById('scroll-text').innerText = data[lang].scroll;
         document.getElementById('title-about').innerText = data[lang].aboutTitle;
@@ -279,7 +173,6 @@
         document.getElementById('title-contact').innerText = data[lang].contactTitle;
         document.getElementById('contact-text').innerText = data[lang].contactText;
         document.getElementById('btn-send').innerText = data[lang].botBtn;
-        
         document.getElementById('chat-logs').innerHTML = `<div style="background: #0a244d; color: #fff; padding: 10px; border-radius: 10px;">${data[lang].botWelcome}</div>`;
     }
 
@@ -290,14 +183,11 @@
         const logs = document.getElementById('chat-logs');
         const val = input.value.toLowerCase().trim();
         if(!val) return;
-
         logs.innerHTML += `<div style="align-self: flex-end; background: var(--accent); color: #000; padding: 10px; border-radius: 10px; max-width: 80%; font-weight: 600;">${input.value}</div>`;
-        
         let reply = data[lang].botUnknown;
         for(let r of data[lang].botResponses) {
             if(r.keys.some(k => val.includes(k))) { reply = r.reply; break; }
         }
-
         setTimeout(() => {
             logs.innerHTML += `<div style="align-self: flex-start; background: #0a244d; color: #fff; padding: 10px; border-radius: 10px; max-width: 80%;">${reply}</div>`;
             logs.scrollTop = logs.scrollHeight;
