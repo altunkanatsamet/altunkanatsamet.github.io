@@ -3,11 +3,11 @@
 import { Send } from "lucide-react";
 import { useState } from "react";
 import type { Locale } from "@/content/site";
-import { person } from "@/content/site";
 
-// Site statik (GitHub Pages) olduğu için mesajlar FormSubmit üzerinden e-postaya iletilir.
-// İlk mesajda FormSubmit, adrese bir onay e-postası yollar; bir kez onaylanınca formlar doğrudan gelir.
-const ENDPOINT = `https://formsubmit.co/ajax/${person.email}`;
+// Site statik (GitHub Pages) olduğu için mesajlar Web3Forms üzerinden e-postaya iletilir.
+// Bu anahtar gizli değildir; Web3Forms onu sayfanın içinde kullanılmak üzere verir.
+const ENDPOINT = "https://api.web3forms.com/submit";
+const ACCESS_KEY = "d1448953-7445-4230-bd65-bfb1c5587cb5";
 
 type Labels = {
   name: string;
@@ -51,17 +51,16 @@ export default function ContactForm({ lang, labels }: { lang: Locale; labels: La
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
+          access_key: ACCESS_KEY,
+          subject: `${lang === "tr" ? "Siteden mesaj" : "Message from site"}: ${name}`,
+          from_name: "sametaltunkanat.me",
           name,
           email,
           message,
-          _replyto: email,
-          _subject: `${lang === "tr" ? "Siteden mesaj" : "Message from site"}: ${name}`,
-          _template: "table",
-          _captcha: "false",
         }),
       });
       const body = await res.json().catch(() => ({}));
-      if (res.ok && String(body.success) === "true") {
+      if (res.ok && body.success === true) {
         form.reset();
         setStatus({ kind: "ok", text: labels.sent });
         return;
