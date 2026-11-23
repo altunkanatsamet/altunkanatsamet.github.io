@@ -1,7 +1,7 @@
 "use client";
 
 import { Send } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/content/site";
 
 // Site statik (GitHub Pages) olduğu için mesajlar Web3Forms üzerinden e-postaya iletilir.
@@ -19,14 +19,44 @@ type Labels = {
   sent: string;
   error: string;
   required: string;
+  tooMany: string;
 };
 
 type Status = { kind: "idle" | "sending" | "ok" | "err"; text?: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Kötüye kullanıma karşı tarayıcı tarafı sınırlar:
+// iki mesaj arasında en az 1 dakika, aynı tarayıcıdan günde en fazla 3 mesaj.
+const COOLDOWN_MS = 60_000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+const MAX_PER_DAY = 3;
+// Sayfa açıldıktan 3 saniye içinde gelen gönderimler insan işi değildir.
+const MIN_FILL_MS = 3_000;
+const STORE_KEY = "contact-sends";
+
+function recentSends(now: number): number[] {
+  try {
+    const list = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
+    return Array.isArray(list) ? list.filter((t) => typeof t === "number" && now - t < DAY_MS) : [];
+  } catch {
+    return [];
+  }
+}
+
+function rememberSend(now: number) {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify([...recentSends(now), now]));
+  } catch {}
+}
+
 export default function ContactForm({ lang, labels }: { lang: Locale; labels: Labels }) {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const openedAt = useRef(0);
+
+  useEffect(() => {
+    openedAt.current = Date.now();
+  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,8 +70,15 @@ export default function ContactForm({ lang, labels }: { lang: Locale; labels: La
       setStatus({ kind: "err", text: labels.required });
       return;
     }
-    if (data._honey) {
+    // Botlar: gizli tuzak alanı dolduran ya da formu anında gönderen istekler sessizce düşürülür.
+    const now = Date.now();
+    if (data.botcheck || now - openedAt.current < MIN_FILL_MS) {
       setStatus({ kind: "ok", text: labels.sent });
+      return;
+    }
+    const sends = recentSends(now);
+    if (sends.length >= MAX_PER_DAY || (sends.length && now - sends[sends.length - 1] < COOLDOWN_MS)) {
+      setStatus({ kind: "err", text: labels.tooMany });
       return;
     }
 
@@ -57,10 +94,12 @@ export default function ContactForm({ lang, labels }: { lang: Locale; labels: La
           name,
           email,
           message,
+          botcheck: "",
         }),
       });
       const body = await res.json().catch(() => ({}));
       if (res.ok && body.success === true) {
+        rememberSend(now);
         form.reset();
         setStatus({ kind: "ok", text: labels.sent });
         return;
@@ -86,8 +125,8 @@ export default function ContactForm({ lang, labels }: { lang: Locale; labels: La
         <textarea id="cf-message" name="message" rows={5} maxLength={4000} placeholder={labels.placeholder} required />
       </div>
       <div className="hp" aria-hidden>
-        <label htmlFor="cf-honey">Leave empty</label>
-        <input id="cf-honey" name="_honey" tabIndex={-1} autoComplete="off" />
+        <label htmlFor="cf-botcheck">Leave empty</label>
+        <input id="cf-botcheck" name="botcheck" tabIndex={-1} autoComplete="off" />
       </div>
       <div className="form-foot">
         <button className="btn primary" type="submit" disabled={status.kind === "sending"}>

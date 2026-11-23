@@ -51,7 +51,7 @@ type Dictionary = {
     copy: string;
     copied: string;
     or: string;
-    form: { name: string; email: string; message: string; placeholder: string; send: string; sending: string; sent: string; error: string; required: string };
+    form: { name: string; email: string; message: string; placeholder: string; send: string; sending: string; sent: string; error: string; required: string; tooMany: string };
   };
   footer: { colophon: string; updated: string };
   menu: string;
@@ -122,6 +122,7 @@ const tr: Dictionary = {
       sent: "Mesajınız ulaştı, teşekkürler. En kısa sürede dönüş yapacağım",
       error: "Bir sorun oluştu. Dilerseniz doğrudan e-posta gönderebilirsiniz",
       required: "Ad, e-posta ve mesaj alanlarını doldurmanız yeterli",
+      tooMany: "Kısa süre içinde birden fazla mesaj gönderdiniz. Lütfen biraz sonra tekrar deneyin",
     },
   },
   footer: {
@@ -301,6 +302,7 @@ const en: Dictionary = {
       sent: "Thanks, your message arrived. I'll get back to you soon",
       error: "Something went wrong. You can also email me directly",
       required: "Name, email and message are all I need",
+      tooMany: "You've already sent a few messages. Please try again a bit later",
     },
   },
   footer: {
