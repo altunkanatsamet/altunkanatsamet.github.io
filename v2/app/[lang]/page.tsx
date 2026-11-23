@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUpRight, Mail } from "lucide-react";
 import HeroScene from "@/components/HeroScene";
 import { Cover } from "@/components/Covers";
 import CopyEmail from "@/components/CopyEmail";
+import ContactForm from "@/components/ContactForm";
 import { getDictionary, isLocale, person } from "@/content/site";
 
 // Sahne görseli public/hero/scene.webp olarak eklendiğinde otomatik görünür.
@@ -173,11 +174,10 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       <section id="contact" className="section">
         <div className="wrap">
           <div className="contact">
-            <div>
+            <div className="contact-left">
               <h2>{t.contact.heading}</h2>
               <p className="contact-sub">{t.contact.sub}</p>
-            </div>
-            <div className="contact-right">
+              <p className="contact-or">{t.contact.or}</p>
               <a className="email" href={`mailto:${person.email}`}>
                 {person.email}
               </a>
@@ -191,6 +191,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
                 </a>
               </div>
             </div>
+            <ContactForm lang={lang} labels={t.contact.form} />
           </div>
         </div>
       </section>

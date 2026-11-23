@@ -17,7 +17,7 @@ export default function CopyEmail({ email, copy, copied }: { email: string; copy
   }
 
   return (
-    <button type="button" className="btn primary" onClick={onCopy} aria-live="polite">
+    <button type="button" className="btn secondary" onClick={onCopy} aria-live="polite">
       {done ? <Check aria-hidden /> : <Copy aria-hidden />}
       {done ? copied : copy}
     </button>

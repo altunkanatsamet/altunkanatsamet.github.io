@@ -45,7 +45,14 @@ type Dictionary = {
   sections: { work: string; experience: string; skills: string; about: string; contact: string };
   work: { open: string; caseLabel: { context: string; role: string; stack: string }; back: string; next: string; whatIDid: string; screens: string };
   about: { paragraphs: string[]; interestsTitle: string; interests: string[]; educationTitle: string; education: string; languagesTitle: string; languages: string; locationTitle: string; location: string };
-  contact: { heading: string; sub: string; copy: string; copied: string };
+  contact: {
+    heading: string;
+    sub: string;
+    copy: string;
+    copied: string;
+    or: string;
+    form: { name: string; email: string; message: string; placeholder: string; send: string; sending: string; sent: string; error: string; required: string };
+  };
   footer: { colophon: string; updated: string };
   menu: string;
   close: string;
@@ -100,10 +107,22 @@ const tr: Dictionary = {
     location: "Konya, Türkiye",
   },
   contact: {
-    heading: "Bir proje, staj ya da iş için yazabilirsin",
-    sub: "E-posta ya da LinkedIn üzerinden ulaşabilirsin",
+    heading: "Fikirden ürüne, birlikte",
+    sub: "Katkı sunabileceğim bir proje varsa ya da bir iş birliği düşünüyorsanız, mesajınızı bekliyorum.",
     copy: "Kopyala",
     copied: "Kopyalandı",
+    or: "ya da doğrudan",
+    form: {
+      name: "Adınız",
+      email: "E-posta adresiniz",
+      message: "Mesajınız",
+      placeholder: "Projenizden ya da fikrinizden kısaca bahsedin",
+      send: "Gönder",
+      sending: "Gönderiliyor…",
+      sent: "Mesajınız ulaştı, teşekkürler. En kısa sürede dönüş yapacağım",
+      error: "Bir sorun oluştu. Dilerseniz doğrudan e-posta gönderebilirsiniz",
+      required: "Ad, e-posta ve mesaj alanlarını doldurmanız yeterli",
+    },
   },
   footer: {
     colophon: "Geist ile dizildi, Next.js ile yapıldı",
@@ -267,10 +286,22 @@ const en: Dictionary = {
     location: "Konya, Türkiye",
   },
   contact: {
-    heading: "Write to me about a project, an internship or a job",
-    sub: "You can reach me by email or on LinkedIn",
+    heading: "From idea to product, together",
+    sub: "If you have a project I can contribute to or you're thinking about a collaboration, I'd love to hear from you.",
     copy: "Copy",
     copied: "Copied",
+    or: "or directly",
+    form: {
+      name: "Name",
+      email: "Email",
+      message: "Message",
+      placeholder: "Tell me briefly about your project or idea",
+      send: "Send",
+      sending: "Sending…",
+      sent: "Thanks, your message arrived. I'll get back to you soon",
+      error: "Something went wrong. You can also email me directly",
+      required: "Name, email and message are all I need",
+    },
   },
   footer: {
     colophon: "Set in Geist, built with Next.js",

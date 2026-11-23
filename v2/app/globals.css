@@ -876,21 +876,28 @@ button {
 }
 
 .contact {
-  align-items: end;
+  align-items: start;
 }
 
-.contact-right {
+.contact-left {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.contact-or {
+  margin-top: 32px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .email {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 28px;
-  line-height: 36px;
+  font-size: 22px;
+  line-height: 30px;
   letter-spacing: -0.01em;
   overflow-wrap: anywhere;
   border-bottom: 1px solid var(--line-strong);
@@ -948,6 +955,88 @@ button {
   }
 }
 
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-content: start;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.field input,
+.field textarea {
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--raised);
+  outline: none;
+  resize: vertical;
+  transition: border-color var(--fast) var(--ease);
+}
+
+.field textarea::placeholder {
+  color: var(--muted);
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: rgba(238, 240, 245, 0.4);
+}
+
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.form-status {
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+.form-status.ok {
+  color: var(--positive);
+}
+
+.form-status.err {
+  color: #e5484d;
+}
+
+@media (max-width: 560px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+  .email {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}
 
 /* ─────────────── Footer ─────────────── */
 .footer {
