@@ -17,22 +17,32 @@ const LIT = { x: 1164, y: 436 };
 
 // [x, y, yarıçap, parlama süresi (sn), gecikme (sn)]
 const STARS: [number, number, number, number, number][] = [
-  [880, 90, 1.4, 5.2, -1.1],
-  [1010, 156, 1.2, 6.8, -3.4],
-  [1150, 70, 1.8, 4.6, -0.6],
-  [1384, 210, 1.3, 7.4, -5.2],
-  [960, 240, 1.1, 5.9, -2.2],
-  [1220, 190, 1.4, 6.3, -4.1],
-  [1392, 96, 1.6, 5.5, -2.9],
-  [1060, 36, 1.1, 7.9, -6.3],
-  [820, 58, 1.2, 6.1, -1.7],
-  [1180, 248, 1.0, 4.9, -3.8],
+  [880, 90, 1.8, 4.2, -1.1],
+  [1010, 156, 1.5, 5.6, -3.4],
+  [1150, 70, 2.4, 3.8, -0.6],
+  [1384, 210, 1.7, 6.2, -5.2],
+  [960, 240, 1.4, 4.9, -2.2],
+  [1220, 190, 2.0, 5.1, -4.1],
+  [1392, 96, 2.2, 4.5, -2.9],
+  [1060, 36, 1.5, 6.6, -6.3],
+  [820, 58, 1.7, 5.0, -1.7],
+  [1180, 248, 1.3, 4.1, -3.8],
+  [1290, 236, 1.6, 5.8, -0.9],
+  [1110, 120, 1.3, 4.4, -2.6],
+  [930, 170, 2.0, 6.0, -4.7],
+  [1260, 20, 1.4, 5.3, -3.1],
+  [760, 140, 1.5, 4.7, -0.3],
+  [1420, 150, 1.4, 6.4, -5.8],
+  [700, 40, 1.2, 5.4, -2.0],
+  [1340, 300, 1.2, 4.3, -1.4],
 ];
 
-// Kayan yıldızlar: (x, y) başlangıç, kuyruk uzunluğu, tekrar aralığı ve ilk gecikme (sn)
+// Kayan yıldızlar: (x, y) başlangıç, kuyruk uzunluğu, tekrar aralığı ve ilk gecikme (sn).
+// Tekrar aralıkları birbirine bölünmediği için her seferinde farklı bir düzende geçerler.
 const METEORS = [
-  { id: "a", x: 1250, y: 52, tail: 150, every: 23, delay: 6 },
-  { id: "b", x: 1110, y: 112, tail: 110, every: 37, delay: 19 },
+  { id: "a", x: 1380, y: 28, tail: 300, every: 11, delay: 3 },
+  { id: "b", x: 1250, y: 118, tail: 240, every: 17, delay: 8.5 },
+  { id: "c", x: 1440, y: 96, tail: 260, every: 23, delay: 14 },
 ];
 
 function Window({ x, y }: { x: number; y: number }) {
@@ -52,10 +62,16 @@ export default function HeroScene({ label }: { label: string }) {
     <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMaxYMax slice" role="img" aria-label={label}>
       <defs>
         <linearGradient id="meteor" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#ffffff" stopOpacity="0.95" />
-          <stop offset="0.25" stopColor="#ffe9b0" stopOpacity="0.5" />
+          <stop offset="0" stopColor="#ffffff" stopOpacity="1" />
+          <stop offset="0.2" stopColor="#fff2c4" stopOpacity="0.75" />
+          <stop offset="0.6" stopColor="#c9d6ff" stopOpacity="0.25" />
           <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
         </linearGradient>
+        <radialGradient id="starGlow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.55" />
+          <stop offset="0.35" stopColor="#dfe7ff" stopOpacity="0.18" />
+          <stop offset="1" stopColor="#dfe7ff" stopOpacity="0" />
+        </radialGradient>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#070b1f" />
           <stop offset="0.36" stopColor="#13204a" />
@@ -89,26 +105,21 @@ export default function HeroScene({ label }: { label: string }) {
       <circle cx={1296} cy={128} r={22} fill="#f4ecd6" />
       <circle cx={1306} cy={121} r={20} fill="#0b1230" />
 
-      {/* Yıldızlar: her biri kendi temposunda yavaşça parlayıp söner */}
+      {/* Yıldızlar: her biri kendi temposunda parlayıp söner, etrafında hafif bir parıltı var */}
       {STARS.map(([x, y, r, d, delay]) => (
-        <circle
-          key={`${x}-${y}`}
-          className="star"
-          cx={x}
-          cy={y}
-          r={r}
-          fill="#ffffff"
-          opacity={0.55}
-          style={{ animationDuration: `${d}s`, animationDelay: `${delay}s` }}
-        />
+        <g key={`${x}-${y}`} className="star" style={{ animationDuration: `${d}s`, animationDelay: `${delay}s` }}>
+          <circle cx={x} cy={y} r={r * 4.5} fill="url(#starGlow)" />
+          <circle cx={x} cy={y} r={r} fill="#ffffff" />
+        </g>
       ))}
 
-      {/* Kayan yıldızlar: iki farklı rota, farklı aralıklarla */}
+      {/* Kayan yıldızlar: üç farklı rota, farklı aralıklarla */}
       {METEORS.map((m) => (
-        <g key={m.id} className="meteor" style={{ animationDuration: `${m.every}s`, animationDelay: `${m.delay}s` }}>
+        <g key={m.id} className={`meteor meteor-${m.id}`} style={{ animationDuration: `${m.every}s`, animationDelay: `${m.delay}s` }}>
           <g transform={`translate(${m.x} ${m.y}) rotate(-24.8)`}>
-            <rect x={0} y={-0.9} width={m.tail} height={1.8} rx={0.9} fill="url(#meteor)" />
-            <circle cx={0} cy={0} r={1.8} fill="#ffffff" />
+            <rect x={0} y={-1.6} width={m.tail} height={3.2} rx={1.6} fill="url(#meteor)" />
+            <circle cx={0} cy={0} r={14} fill="url(#starGlow)" />
+            <circle cx={0} cy={0} r={2.6} fill="#ffffff" />
           </g>
         </g>
       ))}
