@@ -105,21 +105,26 @@ export default function HeroScene({ label }: { label: string }) {
       <rect x={1098} y={HORIZON - 58} width={54} height={44} fill="#090d17" />
       <rect x={1090} y={HORIZON - 64} width={70} height={6} fill="#2a3660" />
 
-      {/* Yanan pencere */}
-      <ellipse cx={lx + COL_W / 2} cy={ly + ROW_H / 2} rx={92} ry={78} fill="url(#glow)" />
-      <rect x={lx} y={ly} width={COL_W} height={ROW_H} rx={1} fill="url(#room)" />
-      {/* Masa ve ekran silueti */}
-      <rect x={lx + 4} y={ly + 22} width={17} height={11} rx={1} fill="#3a2f05" opacity={0.75} />
-      <rect x={lx + 11} y={ly + 33} width={3} height={5} fill="#3a2f05" opacity={0.75} />
-      <rect x={lx} y={ly + 38} width={COL_W} height={3} fill="#3a2f05" opacity={0.55} />
-      <line x1={lx + COL_W / 2} y1={ly} x2={lx + COL_W / 2} y2={ly + ROW_H - 3} stroke="#4a3c06" strokeWidth={1.5} opacity={0.6} />
-      <rect x={lx - 2} y={ly + ROW_H - 3} width={COL_W + 4} height={3} fill="#fbdb10" opacity={0.55} />
-      {/* Duvara ve zemine düşen ışık */}
-      <polygon points={`${lx - 6},${ly + ROW_H} ${lx + COL_W + 6},${ly + ROW_H} ${lx + COL_W + 40},${ly + ROW_H + 70} ${lx - 40},${ly + ROW_H + 70}`} fill="url(#spill)" />
+      {/* Yanan pencere: ışık söndüğünde altındaki karanlık pencere görünür */}
+      <Window x={lx} y={ly} />
+      <g className="lit">
+        <ellipse cx={lx + COL_W / 2} cy={ly + ROW_H / 2} rx={92} ry={78} fill="url(#glow)" />
+        <rect x={lx} y={ly} width={COL_W} height={ROW_H} rx={1} fill="url(#room)" />
+        {/* Masa ve ekran silueti */}
+        <rect x={lx + 4} y={ly + 22} width={17} height={11} rx={1} fill="#3a2f05" opacity={0.75} />
+        <rect x={lx + 11} y={ly + 33} width={3} height={5} fill="#3a2f05" opacity={0.75} />
+        <rect x={lx} y={ly + 38} width={COL_W} height={3} fill="#3a2f05" opacity={0.55} />
+        <line x1={lx + COL_W / 2} y1={ly} x2={lx + COL_W / 2} y2={ly + ROW_H - 3} stroke="#4a3c06" strokeWidth={1.5} opacity={0.6} />
+        <rect x={lx - 2} y={ly + ROW_H - 3} width={COL_W + 4} height={3} fill="#fbdb10" opacity={0.55} />
+        {/* Duvara ve zemine düşen ışık */}
+        <polygon points={`${lx - 6},${ly + ROW_H} ${lx + COL_W + 6},${ly + ROW_H} ${lx + COL_W + 40},${ly + ROW_H + 70} ${lx - 40},${ly + ROW_H + 70}`} fill="url(#spill)" />
+      </g>
 
       {/* Zemin */}
       <rect x={0} y={HORIZON} width={W} height={H - HORIZON} fill="#0a0f1f" />
-      <polygon points={`${lx - 10},${HORIZON} ${lx + COL_W + 10},${HORIZON} ${lx + COL_W + 120},${HORIZON + 90} ${lx - 120},${HORIZON + 90}`} fill="url(#spill)" opacity={0.6} />
+      <g className="lit">
+        <polygon points={`${lx - 10},${HORIZON} ${lx + COL_W + 10},${HORIZON} ${lx + COL_W + 120},${HORIZON + 90} ${lx - 120},${HORIZON + 90}`} fill="url(#spill)" opacity={0.6} />
+      </g>
 
       {/* Ağaçlar */}
       {[

@@ -375,6 +375,42 @@ button {
   isolation: isolate;
 }
 
+/* Yanan pencere: ~14 saniyede bir floresan gibi kısa titreyip söner, sonra yeniden yanar */
+@media (prefers-reduced-motion: no-preference) {
+  .scene .lit {
+    animation: flicker 14s linear 4s infinite;
+  }
+}
+
+@keyframes flicker {
+  0%,
+  88% {
+    opacity: 1;
+  }
+  88.6% {
+    opacity: 0.25;
+  }
+  89.2% {
+    opacity: 0.95;
+  }
+  89.8% {
+    opacity: 0.1;
+  }
+  93% {
+    opacity: 0;
+  }
+  93.6% {
+    opacity: 0.6;
+  }
+  94% {
+    opacity: 0.2;
+  }
+  95%,
+  100% {
+    opacity: 1;
+  }
+}
+
 /* Sahne görseli yoksa sade bir yüzey basamağı */
 .scene {
   position: absolute;
