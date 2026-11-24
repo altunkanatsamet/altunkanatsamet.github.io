@@ -15,6 +15,26 @@ const towerCols = [1056, 1110, 1164];
 const towerRows = [296];
 const LIT = { x: 1164, y: 436 };
 
+// [x, y, yarıçap, parlama süresi (sn), gecikme (sn)]
+const STARS: [number, number, number, number, number][] = [
+  [880, 90, 1.4, 5.2, -1.1],
+  [1010, 156, 1.2, 6.8, -3.4],
+  [1150, 70, 1.8, 4.6, -0.6],
+  [1384, 210, 1.3, 7.4, -5.2],
+  [960, 240, 1.1, 5.9, -2.2],
+  [1220, 190, 1.4, 6.3, -4.1],
+  [1392, 96, 1.6, 5.5, -2.9],
+  [1060, 36, 1.1, 7.9, -6.3],
+  [820, 58, 1.2, 6.1, -1.7],
+  [1180, 248, 1.0, 4.9, -3.8],
+];
+
+// Kayan yıldızlar: (x, y) başlangıç, kuyruk uzunluğu, tekrar aralığı ve ilk gecikme (sn)
+const METEORS = [
+  { id: "a", x: 1250, y: 52, tail: 150, every: 23, delay: 6 },
+  { id: "b", x: 1110, y: 112, tail: 110, every: 37, delay: 19 },
+];
+
 function Window({ x, y }: { x: number; y: number }) {
   return (
     <g>
@@ -31,6 +51,11 @@ export default function HeroScene({ label }: { label: string }) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMaxYMax slice" role="img" aria-label={label}>
       <defs>
+        <linearGradient id="meteor" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="0.25" stopColor="#ffe9b0" stopOpacity="0.5" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#070b1f" />
           <stop offset="0.36" stopColor="#13204a" />
@@ -60,18 +85,32 @@ export default function HeroScene({ label }: { label: string }) {
       <rect width={W} height={H} fill="url(#sky)" />
       <rect width={W} height={H} fill="url(#sun)" />
 
-      {/* Hilal ve birkaç yıldız */}
+      {/* Hilal */}
       <circle cx={1296} cy={128} r={22} fill="#f4ecd6" />
       <circle cx={1306} cy={121} r={20} fill="#0b1230" />
-      {[
-        [880, 90],
-        [1010, 156],
-        [1150, 70],
-        [1384, 210],
-        [960, 240],
-        [1220, 190],
-      ].map(([x, y]) => (
-        <circle key={`${x}-${y}`} cx={x} cy={y} r={1.4} fill="#ffffff" opacity={0.55} />
+
+      {/* Yıldızlar: her biri kendi temposunda yavaşça parlayıp söner */}
+      {STARS.map(([x, y, r, d, delay]) => (
+        <circle
+          key={`${x}-${y}`}
+          className="star"
+          cx={x}
+          cy={y}
+          r={r}
+          fill="#ffffff"
+          opacity={0.55}
+          style={{ animationDuration: `${d}s`, animationDelay: `${delay}s` }}
+        />
+      ))}
+
+      {/* Kayan yıldızlar: iki farklı rota, farklı aralıklarla */}
+      {METEORS.map((m) => (
+        <g key={m.id} className="meteor" style={{ animationDuration: `${m.every}s`, animationDelay: `${m.delay}s` }}>
+          <g transform={`translate(${m.x} ${m.y}) rotate(-24.8)`}>
+            <rect x={0} y={-0.9} width={m.tail} height={1.8} rx={0.9} fill="url(#meteor)" />
+            <circle cx={0} cy={0} r={1.8} fill="#ffffff" />
+          </g>
+        </g>
       ))}
 
       {/* Uzak tepeler */}

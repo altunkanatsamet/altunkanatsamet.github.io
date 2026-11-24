@@ -411,6 +411,56 @@ button {
   }
 }
 
+/* Yıldızlar yavaşça parlar; kayan yıldız arada bir gökyüzünü çizer */
+.scene .meteor {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene .star {
+    animation-name: twinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  .scene .meteor {
+    animation-name: meteor;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.6, 1);
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes meteor {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  0.6% {
+    opacity: 1;
+  }
+  3.6% {
+    opacity: 0.9;
+  }
+  4.4% {
+    transform: translate(-300px, 138px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-300px, 138px);
+    opacity: 0;
+  }
+}
+
 /* Sahne görseli yoksa sade bir yüzey basamağı */
 .scene {
   position: absolute;
