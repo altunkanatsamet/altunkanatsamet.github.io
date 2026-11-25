@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUpRight, Mail } from "lucide-react";
 import HeroScene from "@/components/HeroScene";
 import { Cover } from "@/components/Covers";
 import CopyEmail from "@/components/CopyEmail";
+import { GitHubIcon, LinkedInIcon } from "@/components/BrandIcons";
 import ContactForm from "@/components/ContactForm";
 import { getDictionary, isLocale, person } from "@/content/site";
 
@@ -184,10 +185,14 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
               <div className="contact-links">
                 <CopyEmail email={person.email} copy={t.contact.copy} copied={t.contact.copied} />
                 <a className="btn secondary" href={person.linkedin} target="_blank" rel="noopener">
-                  LinkedIn <ArrowUpRight aria-hidden />
+                  <LinkedInIcon className="brand-icon" />
+                  LinkedIn
+                  <ArrowUpRight className="ext" aria-hidden />
                 </a>
                 <a className="btn secondary" href={person.github} target="_blank" rel="noopener">
-                  GitHub <ArrowUpRight aria-hidden />
+                  <GitHubIcon className="brand-icon" />
+                  GitHub
+                  <ArrowUpRight className="ext" aria-hidden />
                 </a>
               </div>
             </div>

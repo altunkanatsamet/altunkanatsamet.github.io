@@ -194,6 +194,23 @@ button {
   stroke-width: 1.5;
 }
 
+.btn .brand-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.btn .ext {
+  width: 14px;
+  height: 14px;
+  margin-left: -2px;
+  color: var(--muted);
+  transition: color var(--fast) var(--ease);
+}
+
+.btn:hover .ext {
+  color: var(--text);
+}
+
 .btn.primary {
   background: var(--text);
   color: var(--bg);
